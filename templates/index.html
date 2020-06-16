@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href= "{{ url_for('static',filename='styles/style.css') }}" type="text/css" />
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            var distrn = $("#distrn").val();
+            $("#distrn").change(function(){
+                // console.log($("#distrn").val());
+                distrn = $("#distrn").val();
+                console.log(distrn)
+
+                switch (distrn) {
+                    case "uniform":
+                        console.log('uniform');
+                        $("#uniform_params").show();
+                        $("#gaussian_params").hide();
+                        break;
+                    case "gaussian":
+                        console.log('gaussian');
+                        $("#uniform_params").hide();
+                        $("#gaussian_params").show();
+                        break;
+                    default:
+                        $("#uniform_params").hide();
+                        $("#gaussian_params").hide();
+                        break;
+                }
+            });
+        });
+        </script>
+    <title>E Integrator</title>
+  </head>
+
+  <body>
+    <div class='content'>
+        <form action='/integrate' method='post'>
+            <label for="N">Number of quadrature points (Max 20):</label><br>
+            <input type="text" id="N" name="N"><br>
+
+            <label for="distrn">Distribution:</label><br>
+            <select id="distrn" name="distrn">
+                <option value="def">Choose...</option>
+                <option value="uniform">Uniform</option>
+                <option value="gaussian">Gaussian</option>
+            </select><br>
+            
+            <div id="uniform_params" style="display:none">
+                <label for="lower">Lower:</label><br>
+                <input id="lower" type="text" name="lower"><br>
+                <label for="upper">Upper:</label><br>
+                <input id="upper" type="text" name="upper"><br>
+            </div>
+
+            <div id="gaussian_params" style="display:none">
+                <label for="mean">Mean:</label><br>
+                <input id="mean" type="text" name="mean"><br>
+                <label for="variance">Variance:</label><br>
+                <input id="variance" type="text" name="variance" ><br>
+            </div>
+
+            <label for="expression">NumPy expression in terms of x:</label><br>
+            <input id="expression" type="text" name="expression"><br>
+
+            <input type="submit" value="Submit">
+        </form>
+
+        {% include 'result.html' %}
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    
+                    {{ message }}
+
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>  
+  </body>
+</html>

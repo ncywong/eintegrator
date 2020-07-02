@@ -6,7 +6,31 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
         $(document).ready(function(){
-            var distrn = $("#distrn").val();
+            
+            document.getElementById("radio".concat("{{ form['N'] }}")).checked = true;
+            document.getElementById("distrn").value = "{{ form['distrn'] }}";
+            distrn = $("#distrn").val();
+            console.log(distrn)
+
+            switch (distrn) {
+                case "uniform":
+                    $("#uniform_params").show();
+                    $("#gaussian_params").hide();
+                    break;
+                case "gaussian":
+                    $("#uniform_params").hide();
+                    $("#gaussian_params").show();
+                    break;
+                default:
+                    $("#uniform_params").hide();
+                    $("#gaussian_params").hide();
+                    break;
+            }
+            document.getElementById("lower").value = "{{ form['lower'] }}";
+            document.getElementById("upper").value = "{{ form['upper'] }}";
+            document.getElementById("mean").value = "{{ form['mean'] }}";
+            document.getElementById("variance").value = "{{ form['variance'] }}";
+            document.getElementById("expression").value = "{{ form['expression'] }}";
             $("#distrn").change(function(){
                 // console.log($("#distrn").val());
                 distrn = $("#distrn").val();
@@ -14,12 +38,10 @@
 
                 switch (distrn) {
                     case "uniform":
-                        console.log('uniform');
                         $("#uniform_params").show();
                         $("#gaussian_params").hide();
                         break;
                     case "gaussian":
-                        console.log('gaussian');
                         $("#uniform_params").hide();
                         $("#gaussian_params").show();
                         break;
@@ -29,54 +51,149 @@
                         break;
                 }
             });
+
+            $("#detailed").change(function(){
+                if ($('#detailed').is(":checked")) {
+                    $('#fig').attr('src', '/plot_d.png');
+                }
+                else {
+                    $('#fig').attr('src', '/plot.png');
+                }
+            });
+            
+
         });
+
+
+
         </script>
     <title>E Integrator</title>
   </head>
 
   <body>
     <div class='content'>
-        <form action='/integrate' method='post'>
-            <label for="N">Number of quadrature points (Max 20):</label><br>
-            <input type="text" id="N" name="N"><br>
-
-            <label for="distrn">Distribution:</label><br>
-            <select id="distrn" name="distrn">
-                <option value="def">Choose...</option>
-                <option value="uniform">Uniform</option>
-                <option value="gaussian">Gaussian</option>
-            </select><br>
-            
-            <div id="uniform_params" style="display:none">
-                <label for="lower">Lower:</label><br>
-                <input id="lower" type="text" name="lower"><br>
-                <label for="upper">Upper:</label><br>
-                <input id="upper" type="text" name="upper"><br>
-            </div>
-
-            <div id="gaussian_params" style="display:none">
-                <label for="mean">Mean:</label><br>
-                <input id="mean" type="text" name="mean"><br>
-                <label for="variance">Variance:</label><br>
-                <input id="variance" type="text" name="variance" ><br>
-            </div>
-
-            <label for="expression">NumPy expression in terms of x:</label><br>
-            <input id="expression" type="text" name="expression"><br>
-
-            <input type="submit" value="Submit">
-        </form>
-
-        {% include 'result.html' %}
-        {% with messages = get_flashed_messages() %}
-            {% if messages %}
-                {% for message in messages %}
+        <div class='row'>
+            <div class='column'>
+                <form action='/integrate' method='post'>
+                    <!--<label for="N">Number of quadrature points (Max 20):</label><br>
+                    <input type="text" id="N" name="N" value={{ form['N'] }}><br>-->
                     
-                    {{ message }}
+                    <label for="N">Number of quadrature points:</label><br>
+                    <div class='radio-toolbar'>
+                        <input type="radio" id="radio1" name="N" value="1">
+                        <label for="radio1">1</label>
+                      
+                        <input type="radio" id="radio2" name="N" value="2">
+                        <label for="radio2">2</label>
+                      
+                        <input type="radio" id="radio3" name="N" value="3">
+                        <label for="radio3">3</label>
 
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
+                        <input type="radio" id="radio4" name="N" value="4">
+                        <label for="radio4">4</label>
+
+                        <input type="radio" id="radio5" name="N" value="5">
+                        <label for="radio5">5</label>
+                         <br>
+
+                         <input type="radio" id="radio6" name="N" value="6" >
+                         <label for="radio6">6</label>
+                       
+                         <input type="radio" id="radio7" name="N" value="7">
+                         <label for="radio7">7</label>
+                       
+                         <input type="radio" id="radio8" name="N" value="8">
+                         <label for="radio8">8</label>
+ 
+                         <input type="radio" id="radio9" name="N" value="9">
+                         <label for="radio9">9</label>
+ 
+                         <input type="radio" id="radio10" name="N" value="10">
+                         <label for="radio10">10</label>
+                          <br>
+                        
+                          <input type="radio" id="radio11" name="N" value="11" >
+                        <label for="radio11">11</label>
+                      
+                        <input type="radio" id="radio12" name="N" value="12">
+                        <label for="radio12">12</label>
+                      
+                        <input type="radio" id="radio13" name="N" value="13">
+                        <label for="radio13">13</label>
+
+                        <input type="radio" id="radio14" name="N" value="14">
+                        <label for="radio14">14</label>
+
+                        <input type="radio" id="radio15" name="N" value="15">
+                        <label for="radio15">15</label>
+                         <br>
+
+                         <input type="radio" id="radio16" name="N" value="16" >
+                        <label for="radio16">16</label>
+                      
+                        <input type="radio" id="radio17" name="N" value="17">
+                        <label for="radio17">17</label>
+                      
+                        <input type="radio" id="radio18" name="N" value="18">
+                        <label for="radio18">18</label>
+
+                        <input type="radio" id="radio19" name="N" value="19">
+                        <label for="radio19">19</label>
+
+                        <input type="radio" id="radio20" name="N" value="20">
+                        <label for="radio20">20</label>
+                         <br>
+                    </div>
+
+                    <label for="distrn">Distribution:</label><br>
+
+                    <div class="custom-select">
+                    <select id="distrn" name="distrn">
+                        <option value="def">Choose...</option>
+                        <option value="uniform">Uniform</option>
+                        <option value="gaussian">Gaussian</option>
+                    </select>
+
+                    </div><br>
+                    
+                    <div id="uniform_params" >
+                        <label for="lower">Lower:</label><br>
+                        <input id="lower" type="text" name="lower"><br>
+                        <label for="upper">Upper:</label><br>
+                        <input id="upper" type="text" name="upper"><br>
+                    </div>
+
+                    <div id="gaussian_params">
+                        <label for="mean">Mean:</label><br>
+                        <input id="mean" type="text" name="mean"><br>
+                        <label for="variance">Variance:</label><br>
+                        <input id="variance" type="text" name="variance" ><br>
+                    </div>
+
+                    <label for="expression">NumPy expression in terms of x:</label><br>
+                    <input id="expression" type="text" name="expression"><br>
+
+                    <button type='button' onclick="window.location.href='{{ url_for('clear') }}';">Clear</button>
+                    <input type="submit" value="Submit">
+                </form>
+
+                {% include 'result.html' %}
+                {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        {% for message in messages %}
+                            
+                            {{ message }}
+
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+            </div>
+            <div class='column'>
+                <img id="fig" src="/plot.png"> <br>
+                <input type="checkbox" id="detailed" name="detailed" value="detailed">
+                <label for="detailed"> Show PDF and polynomial</label>
+            </div>
+        </div>
     </div>  
   </body>
 </html>

@@ -224,7 +224,7 @@ def create_figure(detailed=False):
             lns = [fx_ln[0], int_fill, quad_sc]
         
         legends = [l.get_label() for l in lns]
-        axis.legend(lns, legends)
+        axis.legend(lns, legends, framealpha=0.0)
     except:
         fig = Figure()
         fig.patch.set_facecolor( (greyCol, greyCol, greyCol, 0.5) )

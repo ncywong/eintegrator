@@ -6,6 +6,7 @@ import numpy as np
 from equadratures import Parameter, Basis, Poly
 from copy import deepcopy
 import io
+import matplotlib.pyplot as plt
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from matplotlib.figure import Figure
 import pickle
@@ -14,6 +15,8 @@ MAX_N = 20
 app = Flask(__name__)
 app.secret_key = b'sarfghasbfkahsbdklahflkajfbn'
 #session.clear()
+plt.rcParams["font.family"] = "Avenir", "Arial", "Helvetica", "sans-serif"
+greyCol = 220/255
 
 # not elegant...
 fields = ['N', 'lower', 'upper', 'mean', 'variance', 'expression']
@@ -110,9 +113,9 @@ def integrate():
     answer = calc_integral(f, N, distr, lower, upper, A, B)
     if answer == 'error':
         result = 'An error occurred during the polynomial quadrature process!'
-    else:
-        result = 'The integral is %f.' % answer
-    flash(result)
+        flash(result)
+    #else:
+    #    result = 'The integral is %f.' % answer
     return redirect('/')
 
 def calc_integral(f, N, distr, lower=None, upper=None, A=None, B=None):
@@ -172,14 +175,16 @@ def plot_png_d():
 def create_figure(detailed=False):
     if not('formdata' in session):
         fig = Figure()
-        axis = fig.add_subplot(1, 1, 1)
+        fig.patch.set_facecolor( (greyCol, greyCol, greyCol, 0.5) )
+        axis = fig.add_subplot(1, 1, 1, facecolor="none")
         return fig
 
     try:
         params = session['formdata']
         #print(params)
         fig = Figure()
-        axis = fig.add_subplot(1, 1, 1)
+        fig.patch.set_facecolor( (greyCol, greyCol, greyCol, 0.5) )
+        axis = fig.add_subplot(1, 1, 1, facecolor="none")
 
         plot_lower = session['plot_lower']
         plot_upper = session['plot_upper']
@@ -189,12 +194,16 @@ def create_figure(detailed=False):
         expr = params['expression']
         def f(x):
             return ne.evaluate(expr)
-        
-        fx_ln = axis.plot(plot_test, f(plot_test), label='f(x)')
+
+        f_val = f(plot_test)
+        fx_ln = axis.plot(plot_test, f_val, label='f(x)')
         legends = ['f(x)', 'Area', 'Quadrature points']
+        pdf_vals = pickle.loads(session['pdf_vals'])
+        fit_vals = pickle.loads(session['fit_vals'])
+        ymin = np.min( np.r_[f_val, pdf_vals, fit_vals] )
+        ymax = np.max( np.r_[f_val, pdf_vals, fit_vals] )
+        axis.set_ylim([1.1*ymin, 1.1*ymax])
         if detailed:
-            pdf_vals = pickle.loads(session['pdf_vals'])
-            fit_vals = pickle.loads(session['fit_vals'])
             axis2 = axis.twinx()
             #axis2.set_yticks([])
             pdf_ln = axis2.plot(plot_test, pdf_vals, 'g--', alpha=0.5, label='PDF (scaled)')
@@ -215,10 +224,11 @@ def create_figure(detailed=False):
             lns = [fx_ln[0], int_fill, quad_sc]
         
         legends = [l.get_label() for l in lns]
-        axis.legend(lns, legends)
+        axis.legend(lns, legends, framealpha=0.0)
     except:
         fig = Figure()
-        axis = fig.add_subplot(1, 1, 1)
+        fig.patch.set_facecolor( (greyCol, greyCol, greyCol, 0.5) )
+        axis = fig.add_subplot(1, 1, 1, facecolor="none")
         return fig
 
     return fig

@@ -1,5 +1,5 @@
 body {
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Avenir", Arial, Helvetica, sans-serif;
   text-align: center;
 }
 * {box-sizing: border-box;}
@@ -10,9 +10,12 @@ body {
 }
 
 input[type=text], select, textarea {
+  background-color: transparent;
+  background-color: rgba(220,220,220,0.5);
+  font-family: "Avenir", Arial, Helvetica, sans-serif;
   width: 300px;
   padding: 12px;
-  border: 1px solid #ccc;
+  border: none;
   border-radius: 4px;
   box-sizing: border-box;
   margin-top: 6px;
@@ -73,7 +76,7 @@ input[type=submit]:hover {
   background-color: #ddd;
   padding: 4px 11px;
   width: 50px;
-  font-family: Arial;
+  font-family: "Avenir", Arial, Helvetica, sans-serif;
   font-size: 16px;
   cursor: pointer;
   margin-bottom: 10px;
@@ -84,11 +87,13 @@ input[type=submit]:hover {
 }
 
 .custom-select {
+  background-color: transparent;
+  background-color: rgba(220,220,220,0.5);
   position: relative;
   display: block;
   width: 300px;
   margin: 0 auto;
-  border: 1px solid #ccc;
+  border: none;
   border-radius: 3px;
   z-index: 10;
 }
@@ -123,4 +128,3 @@ select {
     border-left: 1px solid #3C1C78;
     z-index: -1
   }
-  
